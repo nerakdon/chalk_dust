@@ -1,6 +1,7 @@
 require "chalk_dust/version"
 require "chalk_dust/connection"
 require "chalk_dust/activity_item"
+require "chalk_dust/parameter_sanitizer"
 require "chalk_dust/rails" if defined?(Rails)
 
 module ChalkDust
@@ -11,13 +12,13 @@ module ChalkDust
 
     return if subscribed?(subscriber, :to => publisher, :topic => topic)
 
-    Connection.create(:subscriber => subscriber,
+    Connection.create({:subscriber => subscriber,
                       :publisher => publisher,
-                      :topic => topic)
+                      :topic => topic}.permit!)
 
-    Connection.create(:subscriber => publisher,
+    Connection.create({:subscriber => publisher,
                       :publisher => subscriber,
-                      :topic => topic) if undirected
+                      :topic => topic}.permit!) if undirected
   end
 
   def self.unsubscribe(subscriber, options)
@@ -53,11 +54,11 @@ module ChalkDust
     root_publisher = options.fetch(:root, target)
     topic          = options.fetch(:topic, blank_topic)
     subscribers_of(root_publisher, :topic => topic).map do |subscriber|
-      ActivityItem.create(:performer => performer,
+      ActivityItem.create({:performer => performer,
                           :event     => event,
                           :target    => target,
                           :owner     => subscriber,
-                          :topic     => topic)
+                          :topic     => topic}.permit!)
     end
   end
 
