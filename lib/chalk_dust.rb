@@ -54,7 +54,7 @@ module ChalkDust
     root_publisher = options.fetch(:root, target)
     topic          = options.fetch(:topic, blank_topic)
     subscribers_of(root_publisher, :topic => topic).map do |subscriber|
-      ActivityItem.create({:performer => performer,
+      ActivityItem.create!({:performer => performer,
                           :event     => event,
                           :target    => target,
                           :owner     => subscriber,
