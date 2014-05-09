@@ -10,7 +10,7 @@ module ChalkDust
 
       desc "Generates (but does not run) the migrations for chalk dust"
       def install_migrations
-        migration_template "migration.rb", "db/migrate/chalk_dust_create_tables"
+        migration_template "migration.rb", "db/migrate/chalk_dust_create_tables.rb"
       end
       def self.next_migration_number(dirname)
         ActiveRecord::Generators::Base.next_migration_number(dirname)
